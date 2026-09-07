@@ -39,8 +39,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # Same threshold as the previous `npm audit --omit=dev --audit-level=high`,
+      # but audit-ci can waive a single advisory with a reason and an expiry
+      # date. See audit-ci.jsonc — plain npm audit is all-or-nothing, so one
+      # unfixable transitive finding skipped every step below this one.
       - name: Dependency audit
-        run: npm audit --omit=dev --audit-level=high
+        run: npm run audit
 
       - name: Type-check
         run: npm run type-check
