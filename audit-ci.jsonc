@@ -1,0 +1,36 @@
+{
+  // Dependency gate for CI. Replaces `npm audit --omit=dev --audit-level=high`,
+  // which has no way to waive a single advisory — it is all-or-nothing, so one
+  // unfixable transitive finding takes the whole job red and skips every step
+  // behind it (type-check, lint, tests, RLS suite).
+  //
+  // Same threshold as before: production dependencies only, fail on high and
+  // above. The only difference is that specific advisories can be waived
+  // explicitly, with a reason and an expiry date, instead of by lowering the
+  // bar for everything.
+  //
+  // Waivers are PATH-scoped on purpose. Allowlisting a bare advisory ID would
+  // suppress it everywhere; a path record only suppresses it on the exact
+  // dependency chain listed, so the same advisory reaching us through a
+  // runtime path still fails the build.
+  "$schema": "https://github.com/IBM/audit-ci/raw/main/docs/schema.json",
+  "high": true,
+  "skip-dev": true,
+  "report-type": "important",
+  "allowlist": [
+    {
+      "GHSA-52cp-r559-cp3m|next-sanity>sanity>@sanity/cli>@vercel/frameworks>js-yaml": {
+        "active": true,
+        "notes": "js-yaml 3.13.1, quadratic-complexity DoS via YAML merge keys. Fix requires js-yaml >=4.3.1, but @vercel/frameworks calls jsYaml.safeLoad() in dist/read-config-file.js and safeLoad was removed in js-yaml 4 — forcing the bump swaps a CI failure for a runtime crash in the Sanity CLI config reader. Not reachable from the app: this path is CLI-only tooling, never on a request path. Waived pending an upstream bump in @vercel/frameworks or @sanity/cli.",
+        "expiry": "6 December 2026 00:00"
+      }
+    },
+    {
+      "GHSA-5p4m-2wfm-xmqj|next-sanity>sanity>@sanity/cli>@vercel/frameworks>js-yaml": {
+        "active": true,
+        "notes": "Same js-yaml 3.13.1 dependency path and the same blocker as GHSA-52cp-r559-cp3m above. Re-check both together when Sanity or Vercel bumps js-yaml.",
+        "expiry": "6 December 2026 00:00"
+      }
+    }
+  ]
+}

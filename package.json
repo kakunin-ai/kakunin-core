@@ -14,7 +14,8 @@
     "test:coverage": "vitest run --coverage",
     "test:results": "tsx scripts/generate-test-results.ts",
     "test:smoke": "tsx scripts/v2-smoke.ts",
-    "bot:start": "tsx src/bot/index.ts"
+    "bot:start": "tsx src/bot/index.ts",
+    "audit": "audit-ci --config audit-ci.jsonc"
   },
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "^8.5.0",
@@ -58,6 +59,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@vitest/coverage-v8": "^4.1.6",
+    "audit-ci": "^7.1.0",
     "eslint": "^9",
     "eslint-config-next": "16.2.6",
     "tailwindcss": "^4",
