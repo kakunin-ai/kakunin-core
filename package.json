@@ -41,7 +41,7 @@
     "fumadocs-core": "^16.8.11",
     "fumadocs-mdx": "^15.0.5",
     "fumadocs-ui": "^16.8.11",
-    "next": "16.2.6",
+    "next": "16.3.4",
     "next-sanity": "^12.4.5",
     "node-forge": "^1.4.0",
     "react": "19.2.7",
@@ -65,6 +65,12 @@
     "vitest": "^4.1.6"
   },
   "overrides": {
-    "undici": "6.28.1"
+    "undici": "6.28.1",
+    "jsdom": {
+      "undici": "7.29.0"
+    },
+    "@sanity/cli": {
+      "adm-zip": "0.6.0"
+    }
   }
 }
